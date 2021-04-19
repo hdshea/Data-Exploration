@@ -41,9 +41,10 @@ life_expectancy_data %>%
   ggplot(aes(Year, Expectancy)) +
   geom_line() +
   labs(
-    x = "Year", y = "Life Expectancy",
-    title = "Life expectancy, 1770 to 2019",
-    subtitle = "The World",
+    x = "Year", 
+    y = "Life Expectancy",
+    title = "Life expectancy",
+    subtitle = "1770 to 2019",
     caption = "Source: Our World In Data"
   ) +
   scale_y_continuous(limits = c(20, 90), breaks = seq(20, 90, by = 10))
@@ -59,12 +60,15 @@ life_expectancy_data %>%
   ggplot(aes(Year, Expectancy, color = Entity)) +
   geom_line() +
   labs(
-    x = "Year", y = "Life Expectancy",
-    title = "Life expectancy, 1865 to 2019",
-    subtitle = "Regions",
+    x = "Year", 
+    y = "Life Expectancy",
+    title = "Life expectancy",
+    color = "Region",
+    subtitle = "1770 to 2019",
     caption = "Source: Our World In Data"
   ) +
-  scale_y_continuous(limits = c(20, 90), breaks = seq(20, 90, by = 10))
+  scale_y_continuous(limits = c(20, 90), breaks = seq(20, 90, by = 10)) + 
+  theme(legend.position = "bottom")
 ```
 
 ### Selected Countries
@@ -78,19 +82,22 @@ life_expectancy_data %>%
   ggplot(aes(Year, Expectancy, color = Entity)) +
   geom_line() +
   labs(
-    x = "Year", y = "Life Expectancy",
-    title = "Life expectancy, 1865 to 2019",
-    subtitle = "Selected Countries",
+    x = "Year", 
+    y = "Life Expectancy",
+    color = "Country",
+    title = "Life expectancy",
+    subtitle = "1865 to 2019",
     caption = "Source: Our World In Data"
   ) +
-  scale_y_continuous(limits = c(20, 90), breaks = seq(20, 90, by = 10))
+  scale_y_continuous(limits = c(20, 90), breaks = seq(20, 90, by = 10)) + 
+  theme(legend.position = "bottom")
 ```
 
 ## Survival Rates
 
 These graphs show the share of the population that is expected to survive to the age of 65.
 
-### Selected Areas
+### Selected Geographies
 
 ```{r survival_rate_selected, include = TRUE, warning = FALSE, echo = FALSE, fig.asp = 1, fig.align = "default", out.width = "50%", fig.width = 4}
 men_survival_to_age_65 <- tibble(read.csv("Data/men-survival-to-age-65.csv")) %>%
@@ -108,9 +115,11 @@ men_survival_to_age_65 %>%
   ggplot(aes(Year, Percent, color = Entity)) +
   geom_line() +
   labs(
-    x = "Year", y = "Share of Population",
-    title = "Male Survival Rate, 1960 to 2016",
-    subtitle = "Selected Countries",
+    x = "Year", 
+    y = "Share of Population",
+    title = "Male Survival Rates",
+    color = "Geography",
+    subtitle = "1960 to 2016",
     caption = "Source: Our World In Data"
   ) +
   scale_y_continuous(limits = c(20, 100), breaks = seq(20, 100, by = 10))
@@ -120,9 +129,11 @@ women_survival_to_age_65 %>%
   ggplot(aes(Year, Percent, color = Entity)) +
   geom_line() +
   labs(
-    x = "Year", y = "Share of Population",
-    title = "Female Survival Rate, 1960 to 2016",
-    subtitle = "Selected Countries",
+    x = "Year", 
+    y = "Share of Population",
+    color = "Geography",
+    title = "Female Survival Rates",
+    subtitle = "1960 to 2016",
     caption = "Source: Our World In Data"
   ) +
   scale_y_continuous(limits = c(20, 100), breaks = seq(20, 100, by = 10))
@@ -138,9 +149,11 @@ men_survival_to_age_65 %>%
   ggplot(aes(Year, Percent, color = Entity)) +
   geom_line() +
   labs(
-    x = "Year", y = "Share of Population",
-    title = "Male Survival Rate, 1960 to 2016",
-    subtitle = "By Income Distribution Group",
+    x = "Year", 
+    y = "Share of Population",
+    color = "Group",
+    title = "Male Survival Rates",
+    subtitle = "1960 to 2016",
     caption = "Source: Our World In Data"
   ) +
   scale_y_continuous(limits = c(20, 100), breaks = seq(20, 100, by = 10))
@@ -150,9 +163,11 @@ women_survival_to_age_65 %>%
   ggplot(aes(Year, Percent, color = Entity)) +
   geom_line() +
   labs(
-    x = "Year", y = "Share of Population",
-    title = "Female Survival Rate, 1960 to 2016",
-    subtitle = "By Income Distribution Group",
+    x = "Year", 
+    y = "Share of Population",
+    color = "Group",
+    title = "Female Survival Rates",
+    subtitle = "1960 to 2016",
     caption = "Source: Our World In Data"
   ) +
   scale_y_continuous(limits = c(20, 100), breaks = seq(20, 100, by = 10))

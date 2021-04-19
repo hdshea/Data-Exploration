@@ -32,7 +32,7 @@ were to stay the same throughout its life.
 These graphs show the share of the population that is expected to
 survive to the age of 65.
 
-### Selected Areas
+### Selected Geographies
 
 <img src="life-expectancy_files/figure-gfm/survival_rate_selected-1.png" width="50%" /><img src="life-expectancy_files/figure-gfm/survival_rate_selected-2.png" width="50%" />
 
