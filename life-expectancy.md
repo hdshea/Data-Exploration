@@ -34,8 +34,8 @@ survive to the age of 65.
 
 ### Selected Geographies
 
-<img src="life-expectancy_files/figure-gfm/survival_rate_selected-1.png" width="50%" /><img src="life-expectancy_files/figure-gfm/survival_rate_selected-2.png" width="50%" />
+<img src="life-expectancy_files/figure-gfm/survival_rate_selected-1.png" width="90%" style="display: block; margin: auto;" />
 
 ### By Income Distribution Group Globally
 
-<img src="life-expectancy_files/figure-gfm/survival_rate_income-1.png" width="50%" /><img src="life-expectancy_files/figure-gfm/survival_rate_income-2.png" width="50%" />
+<img src="life-expectancy_files/figure-gfm/survival_rate_income-1.png" width="90%" style="display: block; margin: auto;" />
