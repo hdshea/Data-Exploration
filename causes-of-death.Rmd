@@ -62,7 +62,7 @@ g <- causes_of_death %>%
   theme_minimal() +
   theme(legend.position = 'none') +
   scale_fill_distiller(palette = "Dark2") +
-#  geom_label(aes(label = Count), hjust = -0.5, check_overlap = TRUE) +
+  geom_label(aes(label = Count), hjust = -0.5, check_overlap = TRUE) +
   scale_x_continuous(limits = c(0, 20), breaks = seq(0, 20, by = 5)) +
   labs(
     x = "Millions of Deaths",
