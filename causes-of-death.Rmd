@@ -1,0 +1,77 @@
+---
+title: 'Causes of Death - Data Sets from Our World In Data'
+author: "H. David Shea"
+date: 2021-04-21
+output:
+    github_document: default
+---
+
+```{r setup, include = FALSE, warning = FALSE}
+library(tidyverse)
+library(patchwork)
+
+knitr::opts_chunk$set(
+    connection = "secdb", # automatically uses this connection in sql chunks 
+    comment = "#>", 
+    collapse = TRUE, 
+    message = FALSE,
+    fig.width = 8,
+    fig.asp = ((1 + sqrt(5)) / 2) - 1, # the golden ratio - technically, the b proportion of a+b when a is 1
+    out.width = "70%",
+    fig.align = "center"
+)
+
+causes <- c("Executions", "Meningitis", "Lower_Respiratory_Infections",
+            "Intestinal_Infectious_Diseases", "Protein-Energy_Malnutrition", "Terrorism",
+            "Cardiovascular_Diseases", "Dementias", "Kidney_Disease", 
+            "Respiratory_Diseases", "Liver_Diseases", "Digestive_Diseases", 
+            "Hepatitis", "Cancers", "Parkinson_Disease", "Fire", "Malaria", "Drowning", 
+            "Homicide", "HIV/AIDS", "Drug_Use_Disorders", "Tuberculosis", 
+            "Road_Injuries", "Maternal_Disorders", "Neonatal_Disorders", "Alcohol_Use_Disorders",
+            "Natural_Disasters", "Diarrheal_Diseases", "Heat_And_Cold_Exposure", 
+            "Nutritional_Deficiencies", "Suicide", "Conflict", "Diabetes", "Poisonings")
+
+causes_of_death <- tibble(read.csv("Data/annual-number-of-deaths-by-cause.csv")) %>%
+  arrange(Entity, Year)
+colnames(causes_of_death) <- c("Entity", "Code", "Year", all_of(causes))
+causes_of_death <- causes_of_death %>% mutate(Executions = as.numeric(Executions))
+```
+
+## Data sets
+
+This work references causes of death from the Our World In Data organization.  It reference the specific section of the site [_here_](https://ourworldindata.org/causes-of-death).  
+
+## Causes of Death
+
+The _Global Burden of Disease_ is a major global study on the causes of death and disease published in the medical journal [_The Lancet_](https://www.thelancet.com/gbd). These estimates of the annual number of deaths by cause are shown in this analysis. 
+
+```{r cause_of_death_world, include = TRUE, warning = FALSE, echo = FALSE, out.width = "90%"}
+latest_year <- max(causes_of_death$Year)
+
+g <- causes_of_death %>%
+  filter(Entity == "World") %>%
+  filter(Year == latest_year) %>%
+  pivot_longer(all_of(causes), names_to = "Cause", values_to = "Count") %>%
+  filter(!is.na(Count)) %>% 
+  mutate(
+    Count = round(Count / 1000000, 2),
+    Cause = reorder(as_factor(str_replace(Cause, "_", " ")), Count)
+  ) %>% 
+  ggplot(aes(Count, Cause)) +
+  geom_col(aes(fill = Count)) +
+  theme_minimal() +
+  theme(legend.position = 'none') +
+  scale_fill_distiller(palette = "Dark2") +
+  geom_label(aes(label = Count), hjust = -0.5, check_overlap = TRUE) +
+  scale_x_continuous(limits = c(0, 20), breaks = seq(0, 20, by = 5)) +
+  labs(
+    x = "Millions of Deaths",
+    y = ""
+  )
+
+g + plot_annotation(
+  title = str_c("Number of Deaths by Cause - World - ", latest_year),
+  caption = "Source: Our World In Data"
+)
+```
+

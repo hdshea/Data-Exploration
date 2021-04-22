@@ -36,6 +36,6 @@ survive to the age of 65.
 
 <img src="life-expectancy_files/figure-gfm/survival_rate_selected-1.png" width="90%" style="display: block; margin: auto;" />
 
-### By Income Distribution Group Globally
+### By Income Distribution Group - World
 
 <img src="life-expectancy_files/figure-gfm/survival_rate_income-1.png" width="90%" style="display: block; margin: auto;" />

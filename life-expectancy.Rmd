@@ -20,6 +20,10 @@ knitr::opts_chunk$set(
     out.width = "70%",
     fig.align = "center"
 )
+
+life_expectancy_data <- tibble(read.csv("Data/life-expectancy.csv")) %>%
+  arrange(Entity, Year)
+colnames(life_expectancy_data) <- c("Entity", "Code", "Year", "Expectancy")
 ```
 
 ## Data sets
@@ -33,10 +37,6 @@ These graphs show period life expectancy at birth:  the average number of years 
 ### The World
 
 ```{r life_expectancy_world, include = TRUE, warning = FALSE, echo = FALSE}
-life_expectancy_data <- tibble(read.csv("Data/life-expectancy.csv")) %>%
-  arrange(Entity, Year)
-colnames(life_expectancy_data) <- c("Entity", "Code", "Year", "Expectancy")
-
 life_expectancy_data %>%
   filter(Entity == "World") %>%
   ggplot(aes(Year, Expectancy)) +
@@ -48,6 +48,7 @@ life_expectancy_data %>%
     subtitle = "1770 to 2019",
     caption = "Source: Our World In Data"
   ) +
+  theme_minimal() +
   scale_y_continuous(limits = c(20, 90), breaks = seq(20, 90, by = 10)) +
   scale_colour_brewer(palette = "Dark2")
 ```
@@ -69,6 +70,7 @@ life_expectancy_data %>%
     subtitle = "1770 to 2019",
     caption = "Source: Our World In Data"
   ) +
+  theme_minimal() +
   scale_y_continuous(limits = c(20, 90), breaks = seq(20, 90, by = 10)) + 
   theme(legend.position = "bottom") +
   scale_colour_brewer(palette = "Dark2")
@@ -92,6 +94,7 @@ life_expectancy_data %>%
     subtitle = "1865 to 2019",
     caption = "Source: Our World In Data"
   ) +
+  theme_minimal() +
   scale_y_continuous(limits = c(20, 90), breaks = seq(20, 90, by = 10)) + 
   theme(legend.position = "bottom") +
   scale_colour_brewer(palette = "Dark2")
@@ -122,6 +125,7 @@ m <- men_survival_to_age_65 %>%
     title = "Males",
     color = "Geography"
   ) +
+  theme_minimal() +
   scale_y_continuous(limits = c(20, 100), breaks = seq(20, 100, by = 10)) +
   scale_colour_brewer(palette = "Dark2")
 
@@ -133,6 +137,7 @@ w <- women_survival_to_age_65 %>%
     title = "Females",
     color = "Geography"
   ) +
+  theme_minimal() +
   scale_y_continuous(limits = c(20, 100), breaks = seq(20, 100, by = 10)) +
   scale_colour_brewer(palette = "Dark2")
 
@@ -144,7 +149,7 @@ m + w + plot_layout(ncol = 2, guides = "collect") +
   )
 ```
 
-### By Income Distribution Group Globally
+### By Income Distribution Group - World
 
 ```{r survival_rate_income, include = TRUE, warning = FALSE, echo = FALSE, out.width = "90%"}
 sample_list <- c("High income", "Middle income", "Low income", "World")
@@ -157,6 +162,7 @@ m <- men_survival_to_age_65 %>%
     title = "Males",
     color = "Group"
   ) +
+  theme_minimal() +
   scale_y_continuous(limits = c(20, 100), breaks = seq(20, 100, by = 10)) +
   scale_colour_brewer(palette = "Dark2")
 
@@ -168,6 +174,7 @@ w <- women_survival_to_age_65 %>%
     title = "Females",
     color = "Group"
   ) +
+  theme_minimal() +
   scale_y_continuous(limits = c(20, 100), breaks = seq(20, 100, by = 10)) +
   scale_colour_brewer(palette = "Dark2")
 
