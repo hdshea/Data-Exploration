@@ -136,14 +136,6 @@ These graphs show the share of the population that is expected to survive to the
 
 
 ```r
-men_survival_to_age_65 <- tibble(read.csv("Data/men-survival-to-age-65.csv")) %>%
-  arrange(Entity, Year)
-colnames(men_survival_to_age_65) <- c("Entity", "Code", "Year", "Percent")
-
-women_survival_to_age_65 <- tibble(read.csv("Data/women-survival-to-age-65.csv")) %>%
-  arrange(Entity, Year)
-colnames(women_survival_to_age_65) <- c("Entity", "Code", "Year", "Percent")
-
 sample_list <- c("United States", "China", "Philipines", "United Kingdom", "European Union", "India", "World")
 
 m <- men_survival_to_age_65 %>%

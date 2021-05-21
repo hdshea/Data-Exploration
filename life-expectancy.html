@@ -286,15 +286,7 @@ life_expectancy_data %&gt;%
 <p>These graphs show the share of the population that is expected to survive to the age of 65.</p>
 <div id="selected-geographies" class="section level3">
 <h3>Selected Geographies</h3>
-<pre class="r"><code>men_survival_to_age_65 &lt;- tibble(read.csv(&quot;Data/men-survival-to-age-65.csv&quot;)) %&gt;%
-  arrange(Entity, Year)
-colnames(men_survival_to_age_65) &lt;- c(&quot;Entity&quot;, &quot;Code&quot;, &quot;Year&quot;, &quot;Percent&quot;)
-
-women_survival_to_age_65 &lt;- tibble(read.csv(&quot;Data/women-survival-to-age-65.csv&quot;)) %&gt;%
-  arrange(Entity, Year)
-colnames(women_survival_to_age_65) &lt;- c(&quot;Entity&quot;, &quot;Code&quot;, &quot;Year&quot;, &quot;Percent&quot;)
-
-sample_list &lt;- c(&quot;United States&quot;, &quot;China&quot;, &quot;Philipines&quot;, &quot;United Kingdom&quot;, &quot;European Union&quot;, &quot;India&quot;, &quot;World&quot;)
+<pre class="r"><code>sample_list &lt;- c(&quot;United States&quot;, &quot;China&quot;, &quot;Philipines&quot;, &quot;United Kingdom&quot;, &quot;European Union&quot;, &quot;India&quot;, &quot;World&quot;)
 
 m &lt;- men_survival_to_age_65 %&gt;%
   filter(Entity %in% sample_list) %&gt;%
