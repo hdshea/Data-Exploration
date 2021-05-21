@@ -8,6 +8,7 @@ output:
 
 ```{r setup, include = FALSE}
 library(tidyverse)
+library(directlabels)
 library(patchwork)
 
 knitr::opts_chunk$set(
@@ -20,6 +21,53 @@ knitr::opts_chunk$set(
     out.width = "70%",
     fig.align = "center"
 )
+
+# various plot designs used in the analysis
+
+le_plot_single <- function(data) {
+  ggplot(data, aes(Year, Expectancy)) +
+    geom_line() +
+    labs(
+      x = "Year", 
+      y = "Life Expectancy",
+      title = "Life expectancy",
+      subtitle = "1770 to 2019",
+      caption = "Source: Our World In Data"
+    ) +
+    theme_minimal() +
+    scale_y_continuous(limits = c(20, 90), breaks = seq(20, 90, by = 10)) + 
+    theme(legend.position = "none") +
+    scale_colour_brewer(palette = "Dark2")
+}
+
+le_plot_multi <- function(data, color_lab) {
+  ggplot(data, aes(Year, Expectancy, color = Entity)) +
+    geom_line() +
+    labs(
+      x = "Year", 
+      y = "Life Expectancy",
+      title = "Life expectancy",
+      color = color_lab,
+      subtitle = "1770 to 2019",
+      caption = "Source: Our World In Data"
+    ) +
+    theme_minimal() +
+    scale_y_continuous(limits = c(20, 90), breaks = seq(20, 90, by = 10)) + 
+    theme(legend.position = "bottom") +
+    scale_colour_brewer(palette = "Dark2")
+}
+
+sr_plot <- function(data, title_lab, color_lab) {
+  ggplot(data, aes(Year, Percent, color = Entity)) +
+    geom_line() +
+    labs(
+      title = title_lab,
+      color = color_lab
+    ) +
+    theme_minimal() +
+    scale_y_continuous(limits = c(20, 100), breaks = seq(20, 100, by = 10)) +
+    scale_colour_brewer(palette = "Dark2")
+}
 
 life_expectancy_data <- tibble(read.csv("Data/life-expectancy.csv")) %>%
   arrange(Entity, Year)
@@ -39,18 +87,7 @@ These graphs show period life expectancy at birth:  the average number of years 
 ```{r life_expectancy_world, include = TRUE, warning = FALSE, echo = FALSE}
 life_expectancy_data %>%
   filter(Entity == "World") %>%
-  ggplot(aes(Year, Expectancy)) +
-  geom_line() +
-  labs(
-    x = "Year", 
-    y = "Life Expectancy",
-    title = "Life expectancy",
-    subtitle = "1770 to 2019",
-    caption = "Source: Our World In Data"
-  ) +
-  theme_minimal() +
-  scale_y_continuous(limits = c(20, 90), breaks = seq(20, 90, by = 10)) +
-  scale_colour_brewer(palette = "Dark2")
+  le_plot_single()
 ```
 
 ### Regions
@@ -60,20 +97,7 @@ sample_list <- c("Oceania", "Europe", "Americas", "Asia", "Africa", "World")
 
 life_expectancy_data %>%
   filter(Entity %in% sample_list) %>%
-  ggplot(aes(Year, Expectancy, color = Entity)) +
-  geom_line() +
-  labs(
-    x = "Year", 
-    y = "Life Expectancy",
-    title = "Life expectancy",
-    color = "Region",
-    subtitle = "1770 to 2019",
-    caption = "Source: Our World In Data"
-  ) +
-  theme_minimal() +
-  scale_y_continuous(limits = c(20, 90), breaks = seq(20, 90, by = 10)) + 
-  theme(legend.position = "bottom") +
-  scale_colour_brewer(palette = "Dark2")
+  le_plot_multi("Region")
 ```
 
 ### Selected Countries
@@ -84,20 +108,7 @@ sample_list <- c("Japan", "South Korea", "United Kingdom", "India", "Ethiopia", 
 life_expectancy_data %>%
   filter(Entity %in% sample_list) %>%
   filter(Year >= 1865) %>%
-  ggplot(aes(Year, Expectancy, color = Entity)) +
-  geom_line() +
-  labs(
-    x = "Year", 
-    y = "Life Expectancy",
-    color = "Country",
-    title = "Life expectancy",
-    subtitle = "1865 to 2019",
-    caption = "Source: Our World In Data"
-  ) +
-  theme_minimal() +
-  scale_y_continuous(limits = c(20, 90), breaks = seq(20, 90, by = 10)) + 
-  theme(legend.position = "bottom") +
-  scale_colour_brewer(palette = "Dark2")
+  le_plot_multi("Country")
 ```
 
 ## Survival Rates
@@ -119,27 +130,11 @@ sample_list <- c("United States", "China", "Philipines", "United Kingdom", "Euro
 
 m <- men_survival_to_age_65 %>%
   filter(Entity %in% sample_list) %>%
-  ggplot(aes(Year, Percent, color = Entity)) +
-  geom_line() +
-  labs(
-    title = "Males",
-    color = "Geography"
-  ) +
-  theme_minimal() +
-  scale_y_continuous(limits = c(20, 100), breaks = seq(20, 100, by = 10)) +
-  scale_colour_brewer(palette = "Dark2")
+  sr_plot("Males", "Geography")
 
 w <- women_survival_to_age_65 %>%
   filter(Entity %in% sample_list) %>%
-  ggplot(aes(Year, Percent, color = Entity)) +
-  geom_line() +
-  labs(
-    title = "Females",
-    color = "Geography"
-  ) +
-  theme_minimal() +
-  scale_y_continuous(limits = c(20, 100), breaks = seq(20, 100, by = 10)) +
-  scale_colour_brewer(palette = "Dark2")
+  sr_plot("Females", "Geography")
 
 m + w + plot_layout(ncol = 2, guides = "collect") + 
   plot_annotation(
@@ -156,27 +151,11 @@ sample_list <- c("High income", "Middle income", "Low income", "World")
 
 m <- men_survival_to_age_65 %>%
   filter(Entity %in% sample_list) %>%
-  ggplot(aes(Year, Percent, color = Entity)) +
-  geom_line() +
-  labs(
-    title = "Males",
-    color = "Group"
-  ) +
-  theme_minimal() +
-  scale_y_continuous(limits = c(20, 100), breaks = seq(20, 100, by = 10)) +
-  scale_colour_brewer(palette = "Dark2")
+  sr_plot("Males", "Group")
 
 w <- women_survival_to_age_65 %>%
   filter(Entity %in% sample_list) %>%
-  ggplot(aes(Year, Percent, color = Entity)) +
-  geom_line() +
-  labs(
-    title = "Females",
-    color = "Group"
-  ) +
-  theme_minimal() +
-  scale_y_continuous(limits = c(20, 100), breaks = seq(20, 100, by = 10)) +
-  scale_colour_brewer(palette = "Dark2")
+  sr_plot("Females", "Group")
 
 m + w + plot_layout(ncol = 2, guides = "collect") + 
   plot_annotation(
