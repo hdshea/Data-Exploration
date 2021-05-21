@@ -22,51 +22,7 @@ params:
     value: "World"
 ---
 
-```{r setup, include = FALSE}
-library(tidyverse)
-library(patchwork)
 
-knitr::opts_chunk$set(
-    connection = "secdb", # automatically uses this connection in sql chunks 
-    comment = "#>", 
-    collapse = TRUE, 
-    message = FALSE,
-    fig.width = 8,
-    fig.asp = ((1 + sqrt(5)) / 2) - 1, # the golden ratio - technically, the b proportion of a+b when a is 1
-    out.width = "70%",
-    fig.align = "center"
-)
-
-# various plot designs used in the analysis
-
-le_plot_single <- function(data, region) {
-  ggplot(data, aes(Year, Expectancy)) +
-    geom_line() +
-    labs(
-      x = "Year", 
-      y = "Life Expectancy",
-      title = paste("Life expectancy", region, sep = " - "),
-      subtitle = "1770 to 2019",
-      caption = "Source: Our World In Data"
-    ) +
-    theme_minimal() +
-    scale_y_continuous(limits = c(20, 90), breaks = seq(20, 90, by = 10)) + 
-    theme(legend.position = "none") +
-    scale_colour_brewer(palette = "Dark2")
-}
-
-sr_plot <- function(data, title_lab) {
-  ggplot(data, aes(Year, Percent, color = Entity)) +
-    geom_line() +
-    labs(
-      title = title_lab
-    ) +
-    theme_minimal() +
-    scale_y_continuous(limits = c(20, 100), breaks = seq(20, 100, by = 10)) +
-    theme(legend.position = "none") +
-    scale_colour_brewer(palette = "Dark2")
-}
-```
 
 ## Sections {.tabset .tabset-fade}
 
@@ -74,7 +30,8 @@ sr_plot <- function(data, title_lab) {
 
 This work references data on life expectancy from the Our World In Data organization.  It reference the specific section of the site [_here_](https://ourworldindata.org/life-expectancy).
 
-```{r data_sets, include = TRUE, warning = FALSE}
+
+```r
 life_expectancy_data <- tibble(read.csv("Data/life-expectancy.csv")) %>%
   arrange(Entity, Year)
 colnames(life_expectancy_data) <- c("Entity", "Code", "Year", "Expectancy")
@@ -92,17 +49,21 @@ colnames(women_survival_to_age_65) <- c("Entity", "Code", "Year", "Percent")
 
 These graph shows period life expectancy at birth:  the average number of years a newborn would live if the pattern of mortality in the given year were to stay the same throughout its life.
 
-```{r life_expectancy_plot, include = TRUE, warning = FALSE}
+
+```r
 life_expectancy_data %>%
   filter(Entity == params$life_expectancy_region) %>%
   le_plot_single(params$life_expectancy_region)
 ```
 
+<img src="life-expectancy-selectable_files/figure-html/life_expectancy_plot-1.png" width="70%" style="display: block; margin: auto;" />
+
 ### Survival Rates - Geography
 
 These graphs show the share of the population that is expected to survive to the age of 65.
 
-```{r survival_rate_geography, include = TRUE, warning = FALSE, out.width = "90%"}
+
+```r
 m <- men_survival_to_age_65 %>%
   filter(Entity == params$survival_rate_geography) %>%
   sr_plot("Males")
@@ -119,11 +80,14 @@ m + w + plot_layout(ncol = 2, guides = "collect") +
   )
 ```
 
+<img src="life-expectancy-selectable_files/figure-html/survival_rate_geography-1.png" width="90%" style="display: block; margin: auto;" />
+
 ### Survival Rates - Income Distribution
 
 These graphs show the share of the population that is expected to survive to the age of 65.
 
-```{r survival_rate_income, include = TRUE, warning = FALSE, out.width = "90%"}
+
+```r
 m <- men_survival_to_age_65 %>%
   filter(Entity == params$survival_rate_income_group) %>%
   sr_plot("Males")
@@ -139,3 +103,5 @@ m + w + plot_layout(ncol = 2, guides = "collect") +
     caption = "Source: Our World In Data"
   )
 ```
+
+<img src="life-expectancy-selectable_files/figure-html/survival_rate_income-1.png" width="90%" style="display: block; margin: auto;" />
