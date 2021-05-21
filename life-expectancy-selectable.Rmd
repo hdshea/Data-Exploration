@@ -1,7 +1,7 @@
 ---
 title: 'Data Sets from Our World In Data'
 author: "H. David Shea"
-date: 2021-05-21
+date: "`r format(Sys.time(), '%d %b %Y')`"
 output:
   html_document:
     theme: spacelab
@@ -9,14 +9,17 @@ output:
     keep_md: true
 params:
   life_expectancy_region:
+    label: "Life Expectancy Region:"
     input: select
     choices: ["Oceania", "Europe", "Americas", "Asia", "Africa", "World"]
     value: "World"
   survival_rate_geography:
+    label: "Survival Rate Geography:"
     input: select
     choices: ["United States", "China", "Philipines", "United Kingdom", "European Union", "India", "World"]
     value: "World"
   survival_rate_income_group:
+    label: "Survival Rate Income Group:"
     input: select
     choices: ["High income", "Middle income", "Low income", "World"]
     value: "World"
@@ -36,7 +39,34 @@ knitr::opts_chunk$set(
     out.width = "70%",
     fig.align = "center"
 )
+```
 
+
+## Sections {.tabset .tabset-fade}
+
+### Data sets
+
+This work references data on life expectancy from the Our World In Data organization.  It reference the specific section of the site [_here_](https://ourworldindata.org/life-expectancy).
+
+```{r data_sets, include = TRUE, warning = FALSE}
+life_expectancy_data <- tibble(read.csv("Data/life-expectancy.csv")) %>%
+  arrange(Entity, Year)
+colnames(life_expectancy_data) <- c("Entity", "Code", "Year", "Expectancy")
+
+men_survival_to_age_65 <- tibble(read.csv("Data/men-survival-to-age-65.csv")) %>%
+  arrange(Entity, Year)
+colnames(men_survival_to_age_65) <- c("Entity", "Code", "Year", "Percent")
+
+women_survival_to_age_65 <- tibble(read.csv("Data/women-survival-to-age-65.csv")) %>%
+  arrange(Entity, Year)
+colnames(women_survival_to_age_65) <- c("Entity", "Code", "Year", "Percent")
+```
+
+### Plotting functions
+
+The code snippet here shows the plotting sections used in following graphics tabs.
+
+```{r plot_functions, include = TRUE, warning = FALSE}
 # various plot designs used in the analysis
 
 le_plot_single <- function(data, region) {
@@ -68,25 +98,6 @@ sr_plot <- function(data, title_lab) {
 }
 ```
 
-## Sections {.tabset .tabset-fade}
-
-### Data sets
-
-This work references data on life expectancy from the Our World In Data organization.  It reference the specific section of the site [_here_](https://ourworldindata.org/life-expectancy).
-
-```{r data_sets, include = TRUE, warning = FALSE}
-life_expectancy_data <- tibble(read.csv("Data/life-expectancy.csv")) %>%
-  arrange(Entity, Year)
-colnames(life_expectancy_data) <- c("Entity", "Code", "Year", "Expectancy")
-
-men_survival_to_age_65 <- tibble(read.csv("Data/men-survival-to-age-65.csv")) %>%
-  arrange(Entity, Year)
-colnames(men_survival_to_age_65) <- c("Entity", "Code", "Year", "Percent")
-
-women_survival_to_age_65 <- tibble(read.csv("Data/women-survival-to-age-65.csv")) %>%
-  arrange(Entity, Year)
-colnames(women_survival_to_age_65) <- c("Entity", "Code", "Year", "Percent")
-```
 
 ### Life Expectancy
 

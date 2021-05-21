@@ -1,9 +1,12 @@
 ---
-title: 'Life Expectancy Graphics - Data Sets from Our World In Data'
+title: 'Data Sets from Our World In Data'
 author: "H. David Shea"
-date: 2021-04-19
+date: "`r format(Sys.time(), '%d %b %Y')`"
 output:
-    github_document: default
+  html_document:
+    theme: spacelab
+    code_folding: hide
+    keep_md: true
 ---
 
 ```{r setup, include = FALSE}
@@ -21,7 +24,33 @@ knitr::opts_chunk$set(
     out.width = "70%",
     fig.align = "center"
 )
+```
 
+# {.tabset .tabset-fade}
+
+## Data sets
+
+This work references data on life expectancy from the Our World In Data organization.  It reference the specific section of the site [_here_](https://ourworldindata.org/life-expectancy).
+
+```{r data_sets, include = TRUE, warning = FALSE}
+life_expectancy_data <- tibble(read.csv("Data/life-expectancy.csv")) %>%
+  arrange(Entity, Year)
+colnames(life_expectancy_data) <- c("Entity", "Code", "Year", "Expectancy")
+
+men_survival_to_age_65 <- tibble(read.csv("Data/men-survival-to-age-65.csv")) %>%
+  arrange(Entity, Year)
+colnames(men_survival_to_age_65) <- c("Entity", "Code", "Year", "Percent")
+
+women_survival_to_age_65 <- tibble(read.csv("Data/women-survival-to-age-65.csv")) %>%
+  arrange(Entity, Year)
+colnames(women_survival_to_age_65) <- c("Entity", "Code", "Year", "Percent")
+```
+
+## Plotting functions
+
+The code snippet here shows the plotting designs used in following graphics tabs.
+
+```{r plot_functions, include = TRUE, warning = FALSE}
 # various plot designs used in the analysis
 
 le_plot_single <- function(data) {
@@ -68,23 +97,15 @@ sr_plot <- function(data, title_lab, color_lab) {
     scale_y_continuous(limits = c(20, 100), breaks = seq(20, 100, by = 10)) +
     scale_colour_brewer(palette = "Dark2")
 }
-
-life_expectancy_data <- tibble(read.csv("Data/life-expectancy.csv")) %>%
-  arrange(Entity, Year)
-colnames(life_expectancy_data) <- c("Entity", "Code", "Year", "Expectancy")
 ```
 
-## Data sets
-
-This work references data on life expectancy from the Our World In Data organization.  It reference the specific section of the site [_here_](https://ourworldindata.org/life-expectancy).
-
-## Life Expectancy
+## Life Expectancy {.tabset .tabset-fade .tabset-pills}
 
 These graphs show period life expectancy at birth:  the average number of years a newborn would live if the pattern of mortality in the given year were to stay the same throughout its life.
 
 ### The World
 
-```{r life_expectancy_world, include = TRUE, warning = FALSE, echo = FALSE}
+```{r life_expectancy_world, include = TRUE, warning = FALSE}
 life_expectancy_data %>%
   filter(Entity == "World") %>%
   le_plot_single()
@@ -92,7 +113,7 @@ life_expectancy_data %>%
 
 ### Regions
 
-```{r life_expectancy_regions, include = TRUE, warning = FALSE, echo = FALSE}
+```{r life_expectancy_regions, include = TRUE, warning = FALSE}
 sample_list <- c("Oceania", "Europe", "Americas", "Asia", "Africa", "World")
 
 life_expectancy_data %>%
@@ -102,7 +123,7 @@ life_expectancy_data %>%
 
 ### Selected Countries
 
-```{r life_expectancy_selected, include = TRUE, warning = FALSE, echo = FALSE}
+```{r life_expectancy_selected, include = TRUE, warning = FALSE}
 sample_list <- c("Japan", "South Korea", "United Kingdom", "India", "Ethiopia", "South Africa", "United States", "World")
 
 life_expectancy_data %>%
@@ -111,13 +132,13 @@ life_expectancy_data %>%
   le_plot_multi("Country")
 ```
 
-## Survival Rates
+## Survival Rates {.tabset .tabset-fade .tabset-pills}
 
 These graphs show the share of the population that is expected to survive to the age of 65.
 
 ### Selected Geographies
 
-```{r survival_rate_selected, include = TRUE, warning = FALSE, echo = FALSE, out.width = "90%"}
+```{r survival_rate_selected, include = TRUE, warning = FALSE, out.width = "90%"}
 men_survival_to_age_65 <- tibble(read.csv("Data/men-survival-to-age-65.csv")) %>%
   arrange(Entity, Year)
 colnames(men_survival_to_age_65) <- c("Entity", "Code", "Year", "Percent")
@@ -144,9 +165,9 @@ m + w + plot_layout(ncol = 2, guides = "collect") +
   )
 ```
 
-### By Income Distribution Group - World
+### By Income Distribution Group World-wide
 
-```{r survival_rate_income, include = TRUE, warning = FALSE, echo = FALSE, out.width = "90%"}
+```{r survival_rate_income, include = TRUE, warning = FALSE, out.width = "90%"}
 sample_list <- c("High income", "Middle income", "Low income", "World")
 
 m <- men_survival_to_age_65 %>%

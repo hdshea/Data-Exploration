@@ -1,7 +1,7 @@
 ---
 title: 'Data Sets from Our World In Data'
 author: "H. David Shea"
-date: 2021-05-21
+date: "21 May 2021"
 output:
   html_document:
     theme: spacelab
@@ -9,18 +9,22 @@ output:
     keep_md: true
 params:
   life_expectancy_region:
+    label: "Life Expectancy Region:"
     input: select
     choices: ["Oceania", "Europe", "Americas", "Asia", "Africa", "World"]
     value: "World"
   survival_rate_geography:
+    label: "Survival Rate Geography:"
     input: select
     choices: ["United States", "China", "Philipines", "United Kingdom", "European Union", "India", "World"]
     value: "World"
   survival_rate_income_group:
+    label: "Survival Rate Income Group:"
     input: select
     choices: ["High income", "Middle income", "Low income", "World"]
     value: "World"
 ---
+
 
 
 
@@ -44,6 +48,44 @@ women_survival_to_age_65 <- tibble(read.csv("Data/women-survival-to-age-65.csv")
   arrange(Entity, Year)
 colnames(women_survival_to_age_65) <- c("Entity", "Code", "Year", "Percent")
 ```
+
+### Plotting functions
+
+The code snippet here shows the plotting sections used in following graphics tabs.
+
+
+```r
+# various plot designs used in the analysis
+
+le_plot_single <- function(data, region) {
+  ggplot(data, aes(Year, Expectancy)) +
+    geom_line() +
+    labs(
+      x = "Year", 
+      y = "Life Expectancy",
+      title = paste("Life expectancy", region, sep = " - "),
+      subtitle = "1770 to 2019",
+      caption = "Source: Our World In Data"
+    ) +
+    theme_minimal() +
+    scale_y_continuous(limits = c(20, 90), breaks = seq(20, 90, by = 10)) + 
+    theme(legend.position = "none") +
+    scale_colour_brewer(palette = "Dark2")
+}
+
+sr_plot <- function(data, title_lab) {
+  ggplot(data, aes(Year, Percent, color = Entity)) +
+    geom_line() +
+    labs(
+      title = title_lab
+    ) +
+    theme_minimal() +
+    scale_y_continuous(limits = c(20, 100), breaks = seq(20, 100, by = 10)) +
+    theme(legend.position = "none") +
+    scale_colour_brewer(palette = "Dark2")
+}
+```
+
 
 ### Life Expectancy
 
